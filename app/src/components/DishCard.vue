@@ -1,8 +1,12 @@
-<script>
-export default {
+<script lanng="ts">
+import { defineComponent } from 'vue';
+import type { PropType } from 'vue';
+import type { Dish } from '@/types';
+
+export default defineComponent({
   props: {
     dish: {
-      type: Object,
+      type: Object as PropType<Dish>,
       required: true,
     },
   },
@@ -26,7 +30,7 @@ export default {
       this.$emit('delete-dish', this.dish)
     },
   },
-}
+})
 </script>
 
 <template>
