@@ -1,17 +1,34 @@
-<script>
-import { defineComponent, ref } from 'vue'
+<script setup lang="ts">
+import { onMounted, ref } from 'vue'
 import { v4 as uuidv4 } from 'uuid'
+import type { Dish } from '@/types'
 
-export default defineComponent({
-  emits: ['add-new-dish', 'cancel-new-dish'],
-  data: () => ({
-    newDish: {
-      id: uuidv4(),
-      name: '',
-      status: 'Want to Try',
-      diet: '',
-    },
-  }),
+const emits = defineEmits<{
+  (e: 'add-new-dish', dish: Dish): void;
+  (e: 'cancel-new-dish'): void;
+}>()
+
+const elNameInput = ref<HTMLInputElement | null>(null)
+
+const newDish = ref<Dish>({
+  id: uuidv4(),
+  name: '',
+  status: 'Want to Try',
+  diet: '',
+})
+
+const addDish = () => {
+  emits('add-new-dish', newDish.value)
+}
+
+const removeDish = () => {
+  emits('cancel-new-dish')
+}
+
+onMounted(() => {
+  if (elNameInput.value) {
+    elNameInput.value.focus()
+  }
 })
 </script>
 
@@ -33,8 +50,8 @@ export default defineComponent({
       </div>
       <div class="field">
         <div class="buttons">
-          <button @click="$emit('add-new-dish', newDish)" class="button is-success">Create</button>
-          <button @click="$emit('cancel-new-dish')" class="button is-light">Cancel</button>
+          <button @click="addDish" class="button is-success">Create</button>
+          <button @click="removeDish" class="button is-light">Cancel</button>
         </div>
       </div>
     </div>
